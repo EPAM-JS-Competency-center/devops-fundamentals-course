@@ -59,10 +59,10 @@ branchName=${branchName:-$defaultBranchName}
 #echo "${pipelineName}"
 #echo "${branchName}"
 
-pipelineJson="${pipelineName}.pipeline.json"
+pipelineJson="pipeline.json"
 
 # get pipeline metadata
-aws codepipeline get-pipeline --name "${pipelineName}" >"$pipelineJson" || exit 1
+#aws codepipeline get-pipeline --name "${pipelineName}" >"$pipelineJson" || exit 1
 
 # upd source branch
 jq --arg branchName "$branchName" '.pipeline.stages[0].actions[0].configuration.BranchName = $branchName' "$pipelineJson" >tmp.$$.json && mv tmp.$$.json "$pipelineJson"
