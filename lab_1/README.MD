@@ -31,11 +31,13 @@ $ db.sh add
 **Adds** a new line to the **_users.db_**. The script must **prompt** a user to type the **username** of a new entity. After entering the **username**, the user must be prompted to type a **role**.
 
 Validation rules:
+
 **username** – Latin letters only
+
 **role** – Latin letters only
 
 New entity of **_users.db_** should be a comma-separated value like: _username_, _role_
-The script must **check** the existence of the **users.db** file (for all commands accept `$ db.sh` or `$ db.sh help` ones) and prompt to confirm to create one if it does not exist and to continue initial operation after creation is completed.
+The script must **check** the existence of the **_users.db_** file (for all commands accept `$ db.sh` or `$ db.sh help` ones) and **prompt** to confirm to create one if it does not exist and to continue initial operation after creation is completed.
 
 ```shell
 $ db.sh
@@ -67,7 +69,9 @@ $ db.sh find
 ```
 
 **Prompts** the user to type a username, then prints username and role if such exists in **_users.db_**.
+
 If there is no user with the selected username, the script must **print**: **“User not found”**.
+
 If there is more than one user with such a username, **print** all found entries.
 
 ```shell
@@ -117,7 +121,7 @@ $ db.sh list --inverse
    5. **[Optionally]**, the Repo property in the Source action’s configuration is **set** to a value from the script’s parameter/flag **--repo**.
    (Assume that it is a GitHub repository you’re going to use within the pipeline). 
    6. The **PollForSourceChanges** property in the **Source** action’s configuration is **set** to a value from the script’s parameter/flag **--poll-for-source-changes**.
-   (Assume that it is a property that activates and deactivates the automatic pipeline execution when source code is changed). The default value is false. 
+   (Assume that it is a property that activates and deactivates the automatic pipeline execution when source code is changed). The default value is **false**. 
    7. The **EnvironmentVariables** properties in each action are **filled** with a stringified JSON object containing the **BUILD_CONFIGURATION** **value** from the **--configuration** parameter flag.
 2. The path to the **_pipeline.json _** or another JSON definition file should be **passed** as the first argument to the script.
 The following execution should produce a pipeline definition like [this](./pipeline-upd.json) one.
@@ -127,15 +131,15 @@ The following execution should produce a pipeline definition like [this](./pipel
 ```
 
 3. The script should **validate** if JQ is installed on the host OS.
-If not, display commands on how to install it on different platforms and stop script execution.
+If not, **display** commands on how to install it on different platforms and **stop** script execution.
 4. The script should **validate** if the necessary properties are present in the given JSON definition.
-If not, it should throw an error and stop execution.
+If not, it should **throw** an error and **stop** execution.
 5. The script should **validate** if the path to the pipeline definition JSON file is provided.
-If not, it should throw an error and stop execution.
-6. It should **perform** only 1.a and 1.b actions of no additional parameters are provided.
-E.g.: `$ ./update-pipeline-definition.sh ./pipeline.json` .
+If not, it should **throw** an error and **stop** execution.
+6. It should **perform** only **1.1** and **1.2** actions if no additional parameters are provided.
+E.g.: `$ ./update-pipeline-definition.sh ./pipeline.json`.
 7. **[Optionally]** **implement** a **--help** parameter which will **display** instructions on how to use the script.
-8. **[Optionally]**, **update** the script to ask a user to prompt each argument in a wizard-style (feel free to style it as you wish):
+8. **[Optionally]**, **update** the script to ask a user to **prompt** each argument in a wizard-style (feel free to style it as you wish):
       
 ```
   $ ./update-pipeline-definition.sh
@@ -179,4 +183,3 @@ _Notify your mentor, expert, or other mentees from your group when work is done 
 _Prepare questions beforehand to ask during a group Q&A session with a mentor or expert._
 
 _If you spin some Cloud resources while solving the lab's tasks, terminate them after reporting the results in Learn portal to avoid additional or unexpected charges._
-
