@@ -67,7 +67,7 @@ pipelineJson="pipeline.json"
 # upd source branch
 jq --arg branchName "$branchName" '.pipeline.stages[0].actions[0].configuration.BranchName = $branchName' "$pipelineJson" >tmp.$$.json && mv tmp.$$.json "$pipelineJson"
 # remove metadata
-jq 'del(.metadata)' "$pipelineJson" >tmp.$$.json && mv tmp.$$.json "$pipelineJson"
+jq 'del(.metadata)' "$pipelineJson" > tmp.$$.json && mv tmp.$$.json "$pipelineJson"
 
 #defaultProceedOpt="y"
 #
