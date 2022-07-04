@@ -1,0 +1,22 @@
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+x509_extensions = v3_req
+distinguished_name = dn
+
+[dn]
+C = <country (2 letters)>
+ST = <state/county/region>
+L = <location>
+O = <organization>
+OU = <organizational unit>
+emailAddress = email@example.com
+CN = <common name(example-name.com)>
+
+[v3_req]
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = <first dns>
+DNS.2 = <second dns>
