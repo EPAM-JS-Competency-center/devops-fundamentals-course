@@ -16,7 +16,7 @@
 4. Ping the Linux by IP from your host OS to make sure that configuration of Networking is done correctly, and OS accessible from outside.
 5. [**optional**] configure static IP address for your Linux distribution.
 
-###**Part 2. Configure SSH.**
+#### Part 2. Configure SSH. 
 
 1. Connect to configured Linux VM via [SSH](https://www.ssh.com/ssh/) using username and IP of VM (use NAT or Host Only adapter's IP).
 2. [Create a new user](https://aws.amazon.com/premiumsupport/knowledge-center/new-user-accounts-linux-instance/) with _**root**_ privileges:
@@ -31,7 +31,7 @@
             ```
             ssh <your_alias>
             ```
-### Part 3. Preparing Back-End &amp; Front-End apps.
+#### Part 3. Preparing Back-End &amp; Front-End apps.
 
 1. For further work you will need 2 apps: Front-End app and Back-End for it. You can use your personal REST API server and related single page application (SPA) or there is possibility to use already existing ones, from the repositories of [EPAM JS Competency Center](https://github.com/EPAM-JS-Competency-center) ([nestjs-rest-api](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api), [shop-angular](https://github.com/EPAM-JS-Competency-center/shop-angular-cloudfront), [shop-vue-vuex](https://github.com/EPAM-JS-Competency-center/shop-vue-vuex-cloudfront), [shop-react-redux](https://github.com/EPAM-JS-Competency-center/shop-react-redux-cloudfront))
 2. Set up **Back-End app**:
@@ -47,7 +47,7 @@
     1. **Connect** client app with API, by add necessary actual URLs in client app (for Angular modify environments files) to make FE app sends requests to NodeJS REST API, which you have just configured.
 11. Check that data requested and displayed successfully and all CRUD operations (implemented in app) working well, by running and testing both apps.
 
-###**Part 4. Nginx setup.**
+#### Part 4. Nginx setup.
 
 1. [Download](https://nginx.org/en/download.html), [install](https://nginx.org/en/docs/install.html) ([Windows installation](https://nginx.org/en/docs/windows.html)) and [configure](http://nginx.org/en/docs/beginners_guide.html) [Nginx](https://nginx.org/) on your workstation or laptop.
 2. Implement Nginx configuration which will [serve](https://docs.nginx.com/nginx/admin-guide/web-server/serving-static-content/) FE application and necessary assets. In the [nginx folder](./nginx) you can find examples of templates for servers, with placeholders instead paths and some others configurations.
@@ -60,7 +60,7 @@
     4. redirection from http to https.
 4. **[optional]** Add [_gzip_](https://en.wikipedia.org/wiki/Gzip) [_compression_](https://docs.nginx.com/nginx/admin-guide/web-server/compression/) for static content.
 
-###**Part 5. Starting and serving BE &amp; FE apps on remote OS.**
+#### Part 5. Starting and serving BE &amp; FE apps on remote OS.
 
 1. Using cli/shell tools and [SCP](https://linuxhint.com/linux_scp_command) (NOTE: [_here_](https://winscp.net/eng/index.php) is windows analogue. [_Here_](https://www.computerhope.com/unix/scp.htm#copying-files) and [_here_](https://tecadmin.net/download-file-using-ssh) are some useful topics about Secure Copy tool)
    upload your **built apps** (server and client) files as well as other necessary files for their installation and running (package.json, configs, certificates etc.) to remote Linux OS. Pay attention, it's recommended to place applications files in next locations:
