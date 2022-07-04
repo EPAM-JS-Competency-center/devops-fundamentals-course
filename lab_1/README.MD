@@ -20,8 +20,8 @@
 
 #### Part 2. Create a Bash script using Vim
 
-1.	**Create** an empty directory named data with a file named **_users.db_** in the project’s **lab_1** directory.
-2.	**Create** a directory named **scripts**.  Using Vim editor in your terminal create a [shell script](https://linuxconfig.org/bash-scripting-tutorial-for-beginners) named **_db.sh_** in the **scripts** directory.
+1.	**Create** an empty directory named **data** with a file named **_users.db_** in the project’s **lab_1** directory.
+2.	**Create** a directory named **scripts**.  Using Vim editor in your terminal **create** a [shell script](https://linuxconfig.org/bash-scripting-tutorial-for-beginners) named **_db.sh_** in the **scripts** directory.
 This script must support the following commands:
 
 ```shell
@@ -68,7 +68,7 @@ If there are no backups - script should print: **“No backup file found”**
 $ db.sh find 					
 ```
 
-**Prompts** the user to type a username, then prints username and role if such exists in **_users.db_**.
+**Prompts** the user to type a **username**, then **prints** **username** and **role** if such exists in **_users.db_**.
 
 If there is no user with the selected username, the script must **print**: **“User not found”**.
 
