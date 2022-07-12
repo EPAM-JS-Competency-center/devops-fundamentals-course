@@ -162,6 +162,7 @@ Integrate it into the build-client.sh script to calculate the count of files in 
 
 #### [OPTIONAL] Part 6. Autocompletion, aliases. Automation for commands.
 _Read [Bash Autocompletion](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html)_
+_Read [Creating a bash completion script](https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial)_
 In examples folder you can find configuration how to alias/autocomplete work with docker.
 
 1. **Create** autocompletion script that will help you to show available arguments for all scripts.
