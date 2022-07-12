@@ -160,6 +160,16 @@ The value of the threshold is given by the user as a command line argument. Noti
 Integrate it into the build-client.sh script to calculate the count of files in the client’s app dist folder after the build and display accordingly.
 3. **Complete** [this](./self-check.md) self-check questions.
 
+#### [OPTIONAL] Part 6. Autocompletion, aliases. Automation for commands.
+_Read [Bash Autocompletion](https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html)_
+_Read [Creating a bash completion script](https://iridakos.com/programming/2018/03/01/bash-programmable-completion-tutorial)_
+In examples folder you can find configuration how to alias/autocomplete work with docker.
+
+1. **Create** autocompletion script that will help you to show available arguments for all scripts.
+2. **Read** [information](https://linuxhint.com/bash_command_history_usage/) how to manage history of all commands you running
+   1. for example, when you use bash shell you could press "Ctrl + R" and start typing your command, it will search through all the history. Pressing "Ctrl + R" will cycle over history for matches.
+   2. practice with commands and how to configure bash history and use it efficiently.
+
 **NB: [here](./samples) you can find some samples that you might find handy while solving the lab tasks.**
 
 **NOTES:**
