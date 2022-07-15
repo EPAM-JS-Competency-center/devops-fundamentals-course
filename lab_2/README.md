@@ -31,6 +31,11 @@
             ```
             ssh <your_alias>
             ```
+8. Install the [screen](https://ma.ttias.be/screen-a-must-for-ssh/) utility ([here](https://www.youtube.com/watch?v=Mw6QvsChxo4) and/or [here](https://www.youtube.com/watch?v=I4xVn6Io5Nw) you can find a short video on how to use it).
+Play with the screen (create screens, detach/attach it, split terminal window, etc.) while you connected to the remote host via SSH.
+9. [**optional**] Investigate the [SSH tunneling](https://www.ssh.com/academy/ssh/tunneling) feature ([here](https://goteleport.com/blog/ssh-tunneling-explained/) you can find some additional info). Consider use cases of it.
+For which tasks or operations this approach would be handy for you.
+
 #### Part 3. Preparing Back-End &amp; Front-End apps.
 
 1. For further work you will need 2 apps: Front-End app and Back-End for it. You can use your personal REST API server and related single page application (SPA) or there is possibility to use already existing ones, from the repositories of [EPAM JS Competency Center](https://github.com/EPAM-JS-Competency-center) ([nestjs-rest-api](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api), [shop-angular](https://github.com/EPAM-JS-Competency-center/shop-angular-cloudfront), [shop-vue-vuex](https://github.com/EPAM-JS-Competency-center/shop-vue-vuex-cloudfront), [shop-react-redux](https://github.com/EPAM-JS-Competency-center/shop-react-redux-cloudfront))
@@ -90,25 +95,4 @@
 
 **[OPTIONAL] Task 3**: Run an instance in AWS/Azure/GCP or [select another preferred Cloud Provider](https://www.supereasy.com/100-free-6-best-cloud-service-providers/) and try to setup apps on that cloud instance in the same way as for Linux VM.
 
-
-**NOTES:**
-
-_Using [GitFlow WorkFlow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) to deliver changes to your project is highly recommended._
-
-_We suggest you make [conventional commits](https://www.npmjs.com/package/@commitlint/config-conventional) and commit linting in every app and repository, you work with during this course._
-
-_You can use the [Husky](https://www.npmjs.com/package/husky/v/4.3.8) npm package to set up appropriate git hooks in your project._
-
-_Please, share access to your repository with your mentor, expert, or other students in your group (if necessary)._
-
-_When the task is done, submit a pull request (PR) and request a review from your mentor, expert, or other mentees from your group (if necessary)._
-
-_Duplicate PR’s link and attach it to [Learn Portal](https://learn.epam.com/) when you submit your work for review._ (if any)
-
-_Attach screenshots of your working app along with PR’s link (if any)._
-
-_Notify your mentor, expert, or other mentees from your group when work is done and ready for review (if necessary)._
-
-_Prepare questions beforehand to ask during a group Q&A session with a mentor or expert._
-
-_If you spin some Cloud resources while solving the lab's tasks, terminate them after reporting the results in Learn portal to avoid additional or unexpected charges._
+**[HERE YOU CAN FIND SOME IMPORTANT ORGANISATIONAL NOTES](../ORG-NOTES.md)**
