@@ -19,6 +19,8 @@ hooks:
 - push - unit tests, static code analysis + npm audit
 - optionally configure git staged
 
+- update  prev sh scripts to run all quality tools and checks 
+
 ### Part 1: CI/CD for back-end
  - Local set up
    - quality tools
