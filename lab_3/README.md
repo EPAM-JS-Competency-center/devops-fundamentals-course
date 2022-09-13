@@ -46,7 +46,7 @@ hooks:
 ### Part 2: CI/CD for front-end
 
 - Local set up
-    - quality tools & add script to run quality tools
+    - quality tools
     - build app (use script from the first module)
 
 - Cloud setup / Cloud CI/CD
