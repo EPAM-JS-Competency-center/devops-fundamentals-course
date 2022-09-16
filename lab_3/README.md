@@ -5,21 +5,22 @@
 
 # Sub-task 1 - Configure Continuous Integrations (CI) for local development: front-end and back-end
 
-NPM Scripts:
-commit lint
-es linting
-testing
-[static code analysis (optionally deploy and configure SonarScanner (community edition)) or use CodeCov]
-npm audit
-release
-
-hooks:
-- pre-commit (commit message linting)
-- commit - es linting
-- push - unit tests, static code analysis + npm audit
-- optionally configure git staged
-
-- update  prev sh scripts to run all quality tools and checks 
+0. **Clone**/**pull** given [front-end](https://github.com/EPAM-JS-Competency-center/shop-angular-cloudfront/tree/feat/devops-cicd-lab) and [back-end](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api/tree/feat/devops-cicd-lab) apps.
+1. **Configure** the following integrations for both apps and **add** appropriate npm scripts for convenience:
+   - [commit linting](https://commitlint.js.org/#/?id=getting-started) 
+   - linting for *.js/*.ts files with [eslint](https://eslint.org/) and [typescript-eslint](https://typescript-eslint.io/docs/)
+   - running unit tests (in *.test|spec.ts|js files) with [jest](https://jestjs.io/). Optionally*, add a test coverage threshold (~5-20%)
+   - dependencies check with [npm audit](https://docs.npmjs.com/cli/v6/commands/npm-audit) or [Snyk Open Source](https://snyk.io/product/open-source-security-management/)
+   - static code analysis with [CodeCov](https://about.codecov.io/for/open-source/) or [SonarQube Community Edition](https://www.sonarqube.org/downloads/) and [SonarScanner](https://www.npmjs.com/package/sonarqube-scanner) 
+   - release using [standard version](https://www.npmjs.com/package/standard-version)
+   - optionally*, configure e2e testing with [Cypress](https://www.cypress.io/) or [Webdriver.io](https://webdriver.io/)
+2. **Configure** the following git hooks using [husky](https://www.npmjs.com/package/husky) npm package:
+   - _pre-commit_ - commit message linting
+   - _commit_ - js|ts linting
+   - _push_ - running unit tests, static code analysis and dependencies audit
+Optionally*, **configure** [lint-staged](https://www.npmjs.com/package/lint-staged)
+3. **Add** and/or **update** your shell scripts from previous labs to quickly invoke all quality tools and checks.
+4. **Create** a single sh script, with will execute other scripts for quality checks and app build process.
 
 ### Part 1: CI/CD for back-end
  - Local set up
