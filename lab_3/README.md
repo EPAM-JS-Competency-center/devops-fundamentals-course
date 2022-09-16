@@ -32,7 +32,7 @@ Pipeline should have the following stages:
    - _deployment_: publishes your static web app to any content delivery network (CDN)
 > **NB**:
   >- if you have an account in AWS, Azure, GCP (or can create one) you can use their storage and CDN services.
-  >- if for some reason you can't use any of mentioned cloud providers, you can use any free [CDN](https://geekflare.com/free-cdn-list/)
+  >- if for some reason you can't use any of mentioned cloud providers, you can use any free [CDN](https://geekflare.com/free-cdn-list/) or use web server to server your static assets on your workstation.
 
 ### Sub-task 3 - Configure CI/CD pipeline for back-end app
 
@@ -59,3 +59,6 @@ Pipeline should have the following stages:
  >- create necessary bash scripts and IaaC configurations for use in your CI/CD pipeline
  >- you can skip any of pipeline's stages of you feel stuck or overwhelmed
  >- use environmental variables to store credentials and/or configuration parameters
+ >- if you can't build CI/CD pipeline using services or cloud providers, try to emulate it locally. 
+    After all, CI/CD is all about automation of our routine work. And CI/CD services just execute your automated jobs.
+    You have everything to emulate CI/CD workflows on your local machine.
