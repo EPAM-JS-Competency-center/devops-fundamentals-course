@@ -1,8 +1,5 @@
 ### Lab 3: Infrastructure as Code. CI/CD fundamentals.
 
-##### TODOs:
-- add links
-
 # Sub-task 1 - Configure Continuous Integrations (CI) for local development: front-end and back-end
 
 0. **Clone**/**pull** given [front-end](https://github.com/EPAM-JS-Competency-center/shop-angular-cloudfront/tree/feat/devops-cicd-lab) and [back-end](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api/tree/feat/devops-cicd-lab) apps.
