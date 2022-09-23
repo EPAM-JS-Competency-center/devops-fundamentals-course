@@ -15,7 +15,7 @@
    - _commit-msg_ - [commit message linting](https://git-scm.com/docs/githooks#_commit_msg)
    - _pre-commit_ - js|ts linting [before committing changes](https://git-scm.com/docs/githooks#_pre_commit)
    - _pre-push_ - running unit tests, static code analysis and dependencies audit [before the code is being pushed](https://git-scm.com/docs/githooks#_commit_msg)
-OPTIONALLY*, **configure** [lint-staged](https://www.npmjs.com/package/lint-staged)
+   - OPTIONALLY*, **configure** [lint-staged](https://www.npmjs.com/package/lint-staged)
 3.  **Update** your shell script from the lab #1 (**_quality-check.sh_**) to invoke the following quality tools and checks: _eslint_, _testing_, _dependencies check_, _static code analysis_.
 
 ### Sub-task 2 - Configure CI/CD pipeline for front-end app
