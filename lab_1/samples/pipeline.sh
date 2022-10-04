@@ -21,7 +21,6 @@ checkJQ() {
 
   if [ "$exitCode" -ne 0 ]; then
     printf "  ${red}'jq' not found! (json parser)\n${end}"
-    printf "    MacOS Installation:  https://jira.amway.com:8444/display/CLOUD/Configure+PowerShell+for+AWS+Automation#ConfigurePowerShellforAWSAutomation-MacOSSetupforBashScript\n"
     printf "    Ubuntu Installation: sudo apt install jq\n"
     printf "    Redhat Installation: sudo yum install jq\n"
     jqDependency=0
