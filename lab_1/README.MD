@@ -17,6 +17,7 @@
    5. **Check** if the file **_client-app.zip_** exists before building. If so, remove it from the file system and proceed with the build.
 2. Using Vim or Nano editor **create** a new shell script (**_quality-check.sh_**) which will run code quality tools (**linting**, **unit tests**, **npm audit**, etc.) over the client app from the previous step and report if the app has some problems with its quality.
 3. **[Optionally]**, **automate** the build and quality processes for [this](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api) app/repo.
+4. **[Optionally]**, **integrate** script, created in **Task 1** (for counting the number of files in directories) into the `build-client.sh` script, to calculate the count of files in the client’s app dist folder after the build and display accordingly.
 
 #### Part 2. Automate tasks with JSON files
 
@@ -48,7 +49,7 @@ If not, it should **throw** an error and **stop** execution.
 6. It should **perform** only **1.1** and **1.2** actions if no additional parameters are provided.
 E.g.: `$ ./update-pipeline-definition.sh ./pipeline.json`.
 7. **[Optionally]** **implement** a **--help** parameter which will **display** instructions on how to use the script.
-8. **[Optionally]**, **update** the script to ask a user to **prompt** each argument in a wizard-style (feel free to style it as you wish):
+8. **[Optionally]** **update** the script to ask a user to **prompt** each argument in a wizard-style (feel free to style it as you wish):
       
 ```
   $ ./update-pipeline-definition.sh

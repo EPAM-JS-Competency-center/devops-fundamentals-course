@@ -7,7 +7,6 @@
 1. **Create** a new directory named **task_1** in the project’s **module_4** directory.
 2. **Create** a shell script that will watch free disk space. The bash script should follow watch the free space of your hard disks and warns you when that free space drops below a given threshold.
    The value of the threshold is given by the user as a command line argument. Notice that if the program gets no command line argument, a default value is used as the threshold.
-2. **Create** a shell script, which will count the number of files that exist in each given directory and its subdirectories.
-   Integrate it into the build-client.sh script to calculate the count of files in the client’s app dist folder after the build and display accordingly.
-
-**[HERE YOU CAN FIND SOME IMPORTANT ORGANISATIONAL NOTES](../ORG-NOTES.md)**
+3. **Create** a shell script, which will count the number of files that exist in each given directory and its subdirectories.
+   
+**[HERE YOU CAN FIND SOME IMPORTANT ORGANISATIONAL NOTES](../../../ORG-NOTES.md)**

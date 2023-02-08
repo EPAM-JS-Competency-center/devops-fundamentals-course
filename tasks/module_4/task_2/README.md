@@ -84,4 +84,4 @@
 
 **NB: [here](./db) you can find some samples that you might find handy while solving the task.**
 
-**[HERE YOU CAN FIND SOME IMPORTANT ORGANISATIONAL NOTES](../ORG-NOTES.md)**
+**[HERE YOU CAN FIND SOME IMPORTANT ORGANISATIONAL NOTES](../../../ORG-NOTES.md)**
