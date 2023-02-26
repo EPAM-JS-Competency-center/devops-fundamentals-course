@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Task: Create a shell script, which will count the number of files that exist in each given directory and its subdirectories.
+
+# Counts files in the directory provided as a command line argument
+# Is no argument provided, the current location is used.
+path=$1
+if [[ -z $1 ]]
+then 
+    path=$PWD
+fi
+
+echo "Scanning files inside '$path' folder"
+echo "Total files count: $( find $path -type f 2>/dev/null | wc -l )"

@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Create a shell script that will watch free disk space. 
+# The bash script should follow watch the free space of your hard disks 
+# and warns you when that free space drops below a given threshold. 
+# The value of the threshold is given by the user as a command line argument. 
+# Notice that if the program gets no command line argument, a default value is used as the threshold.
+
+# Script requires providing threshold value in Gigabytes
+# If no argument provided, the default value for threshold is 10 Gbytes.
+
+get_free_space() {
+    local -a arr=()
+    local -i i=0
+
+    stat=$(df -g / | tail -n 1)
+
+    for a in $stat
+    do
+        arr[$i]=$a
+        ((i++))
+    done
+    freeSpace=${arr[3]}
+}
+
+threshold=$1
+state=0
+if [[ -z $1 ]]
+then 
+    threshold=10
+fi
+echo "Observing free disk space for threshold: $threshold Gb."
+echo "Press [CTRL+C] to stop.."
+while true
+do
+    get_free_space
+    if (( $freeSpace < $threshold))
+    then echo -e "\033[4;31;40mW A R N I N G: \033[0m\033[31;40m Disk free space is below the threshold!\033[0m"; state=0
+    else 
+        if (( $state==0 ))
+        then echo -e "\033[32;40mState is good.\033[0m"; state=1
+        fi
+    fi
+    sleep 10
+done
