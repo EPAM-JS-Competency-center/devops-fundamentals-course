@@ -3,7 +3,7 @@
 # default value to use if none specified
 THRESHOLD=30
 
-# test for command line arguement is present
+# test for command line argument is present
 if [[ $# -le 0 ]]
 then
     printf "Using default value for threshold!\n"
@@ -22,9 +22,9 @@ printf "Threshold = %d\n" $THRESHOLD
 df -Ph | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $5,$1 }' | while read data;
 do
     used=$(echo $data | awk '{print $1}' | sed s/%//g)
-    p=$(echo $data | awk '{print $2}')
     if [ $used -ge $THRESHOLD ]
     then
-        echo "WARNING: The partition \"$p\" has used $used% of total available space - Date: $(date)"
+      partition=$(echo $data | awk '{print $2}')
+      echo "WARNING: The partition \"$partition\" has used $used% of total available space - Date: $(date)"
     fi
 done
