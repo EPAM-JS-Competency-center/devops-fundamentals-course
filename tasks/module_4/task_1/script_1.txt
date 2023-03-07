@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+declare -i size=0
+declare -i n=2
+declare -i lSize=$(df | awk -v v=$n 'NR==v {print $4}')
+declare -i defaultThreshold=1234
+if [[ $1 ]]
+then
+  defaultThreshold=$1
+fi
+while ((lSize!=0))
+do
+  size=$size+$lSize
+  ((n++))
+  declare -i lSize=$(df | awk -v v=$n 'NR==v {print $4}')
+done
+if [[ $size -lt $defaultThreshold ]]
+then
+  declare -i diff=$defaultThreshold-$size
+  echo 'Free disk space is less than threshold by' $diff 'KBites'
+else
+  echo 'Free disk space higher than threshold'
+fi

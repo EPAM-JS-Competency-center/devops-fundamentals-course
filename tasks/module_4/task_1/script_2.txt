@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+countSubDirectoryFiles() {
+  declare -i subNumFiles=0
+  declare -i subN=2
+  declare subCursor=$(ls -l ./$1 | awk -v v=$subN 'NR==v {print $1}')
+  while [ $subCursor ]
+  do
+    if [[ $subCursor =~ ^- ]]
+    then
+      ((subNumFiles++))
+    fi
+    ((subN++))
+    declare subCursor=$(ls -l ./$1 | awk -v v=$subN 'NR==v {print $1}')
+  done
+  echo 'the directory ./'$1 'has' $subNumFiles 'file(s)'
+}
+
+declare -i numFiles=0
+declare -i n=2
+declare cursor=$(ls -l | awk -v v=$n 'NR==v {print $1}')
+while [ $cursor ]
+do
+  if [[ $cursor =~ ^- ]]
+  then
+    ((numFiles++))
+  else
+    declare folderName=$(ls -l | awk -v v=$n 'NR==v {print $9}')
+    countSubDirectoryFiles $folderName
+  fi
+  ((n++))
+  declare cursor=$(ls -l | awk -v v=$n 'NR==v {print $1}')
+done
+echo 'current directory' $(pwd) 'has' $numFiles 'file(s)'
+
