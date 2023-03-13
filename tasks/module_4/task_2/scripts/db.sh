@@ -81,7 +81,7 @@ function find {
 
 inverseParam="$2"
 function list {
-    if [[ $inverseParam == "inverse" ]]
+    if [[ $inverseParam == "--inverse" ]]
     then
       cat --number $filePath | tac
     else
@@ -113,7 +113,6 @@ function help {
 
 
 export $1
-# TODO implement each command
 case $1 in
   add)            add ;;
   backup)         backup ;;
