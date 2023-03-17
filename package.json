@@ -1,0 +1,25 @@
+{
+  "name": "devops-fundamentals-course",
+  "version": "1.0.0",
+  "description": "<img src=\"program-logo.png\" alt=\"drawing\" style=\"width:200px;\"/>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/nicotsou/devops-fundamentals-course.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nicotsou/devops-fundamentals-course/issues"
+  },
+  "homepage": "https://github.com/nicotsou/devops-fundamentals-course#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.4",
+    "@commitlint/config-conventional": "^17.4.4",
+    "husky": "^8.0.0"
+  }
+}
