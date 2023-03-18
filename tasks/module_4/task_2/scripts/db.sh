@@ -80,7 +80,6 @@ function find {
 
 inverseParam="$2"
 function list {
-  echo $inverseParam;
     if [[ $inverseParam == '--inverse' ]]
     then
       printf "$(cat -n $filePath | tac)\n"
