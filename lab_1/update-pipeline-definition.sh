@@ -48,7 +48,7 @@ joinBy() {
 checkJQ
 checkPipelineFile $1
 
-echo "Removing metadata..."
+echo "Updating pipeline..."
 timestamp=$(date "+%Y-%m-%d_%H-%M-%S")
 outputFilename="pipeline-$timestamp.json"
 
@@ -70,21 +70,24 @@ done
 
 echo "$branch, $configuration, $owner, $poll"
 
-
 # jq commands
 jsonModifications=(
   "del(.metadata)" 
   ".pipeline.version += 1"
+  ".pipeline.stages[0].actions[0].configuration.Branch = \"$branch\""
+  ".pipeline.stages[0].actions[0].configuration.Owner = \""$owner\"""
+  ".pipeline.stages[0].actions[0].configuration.PollForSourceChanges = \""$poll\"""
+  ".pipeline.stages[].actions[].configuration.EnvironmentVariables = $(cat $configuration | jq -R)"
 )
+
 separator=' | '
 joinedCommands=$(printf "${separator}%s" "${jsonModifications[@]}")
 joinedCommands=${joinedCommands:${#separator}}
 
 jq "$joinedCommands" "$pipelinePath" | tee "$outputFilename"
 
+#jq ".pipeline.stages[0].actions[0].configuration.Branch = \"$branch\"" "$pipelinePath" | tee "$outputFilename"
+
 echo "✅ Successfully updated pipeline in $outputFilename"
-
-
-
 
 exit 0
