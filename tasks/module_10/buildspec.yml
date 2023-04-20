@@ -1,0 +1,65 @@
+version: 0.2
+
+env:
+  variables:
+    ## Application build-related variables"
+    #    PROJECT_NAME: ""
+    BUILD_CONFIGURATION: "qa"
+
+    ## AWS-specific variables:
+    S3_BUCKET: ""
+    CLOUDFRONT_DISTRIBUTION_ID: ""
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+
+    commands:
+      ## Update system packages
+      - echo Updating and Installing system dependencies...
+      #      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - apt-get update -y -q --list-cleanup || true
+
+      ## Install all necessary dependencies:
+      - echo Installing source NPM dependencies...
+      - cd Modules
+      - npm ci
+
+  build:
+    commands:
+      - echo Build is started on `date`
+      - npm run build
+      - echo Build is successfully completed on `date`
+
+  post_build:
+    commands:
+      - echo Application deployment is started on `date`
+
+      ## enable CloudFront cli:
+      - aws configure set preview.cloudfront true
+
+      ## Prepare a Maintenance page
+      ## Copy the maintenance page to S3 bucket:
+      #      - aws s3 cp maintenance/index.html s3://${S3_BUCKET}/index.html
+      ## Invalidate CloudFront cache
+      #      - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/index.html"
+
+      ## Clear S3 bucket:
+      #      - aws s3 rm s3://${S3_BUCKET} --recursive --exclude "index.html"
+      - aws s3 rm s3://${S3_BUCKET} --recursive
+      - echo S3 bucket is cleared.
+
+      ## Copy dist folder to S3 bucket:
+      - aws s3 cp build s3://${S3_BUCKET} --recursive
+
+      ## Create CloudFront invalidation (which actually clears cache):
+      - aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths "/*"
+
+      - echo Application deployment is successfully completed on `date`
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'dist*'
+  discard-paths: yes

@@ -44,18 +44,7 @@ Pipeline should have the following stages:
 
 ### Sub-task 3 - Configure CI/CD pipeline for back-end app
 
-_Local setup_:
-
-1. **Dockerize** the back-end app:
-   - **add** _Dockerfile_ which will build an image with the back-end app
-   - **add** _.dockerignore_ to prevent unnecessary files from getting into the final Docker image
-   - **try** to make your final image as minimal as possible by applying some [Dockerfile optimisation techniques](https://www.codewall.co.uk/writing-an-optimized-dockerfile/)
-2. **Publish** your image to any [free private or public Docker registry](https://www.slant.co/topics/2436/~best-docker-image-private-registries) based on your preference.
-> **NB**:
-  >- if you have an account in AWS, Azure, GCP (or can create one) you can use their container registries.
-3. **Create** bash script (**_build_docker_image.sh_**), which will build Docker image/container of the app and push to your registry.
-4. **Pull** the image from registry and **execute**/**run** it locally, so that you can access the app through your browser or with curl.
-5. OPTIONALLY*, **Set** up Docker on your VM. Then **create** a shell script, which will SSH to your VM, pull Docker image from registry and run it on port 81
+TODO: update the lab.. 
 
 _Cloud setup_:
 
