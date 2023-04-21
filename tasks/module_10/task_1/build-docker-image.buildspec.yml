@@ -1,0 +1,90 @@
+version: 0.2
+
+env:
+  variables:
+    DOCKER_REPOSITORY_NAME: "repo"
+    DOCKER_REGISTRY_URL: "111111111210.dkr.ecr.us-east-1.amazonaws.com"
+    DOCKER_REGISTRY_REGION: "us-east-1"
+    DOCKER_ENV_TAG: "qa"
+    DOCKER_BASE_IMAGES_REGISTRY_URL: ""
+    DOCKER_BASE_IMAGES_REPOSITORY_NAME: "base-images"
+    DOCKER_BASE_NODE_IMAGE_TAG: "node-14.15.1-alpine"
+    # Dynatrace OneAgent variables:
+    DT_API_URL_PREPROD: ""
+    DT_API_TOKEN_PREPROD: ""
+    DT_API_URL_PROD: ""
+    DT_API_TOKEN_PROD: ""
+    # Dynatrace OneAgent pre-set variables:
+    DT_ONEAGENT_OPTIONS: "flavor=musl&include=nodejs"
+    DT_ONEAGENT_ARCH_NAME: "oneagent.zip"
+    DT_ONEAGENT_INSTALLER_PATH: "v1/deployment/installer/agent/unix/paas/latest"
+
+phases:
+  install:
+    commands:
+      # Update system packages
+      # Temporary fix. TODO: clean it up...
+      - apt-get update -y -q --list-cleanup || true
+
+  build:
+    commands:
+      - echo Docker image build started on `date`
+      -
+        ## Docker env variables
+        #DOCKER_REPOSITORY_NAME="amer-authentication"
+        #DOCKER_REGISTRY_URL="655648606120.dkr.ecr.us-east-1.amazonaws.com"
+        #DOCKER_REGISTRY_REGION="us-east-1"
+        #DOCKER_ENV_TAG="qa"
+        #DOCKER_BASE_IMAGES_REGISTRY_URL=""
+        #DOCKER_BASE_IMAGES_REPOSITORY_NAME="base-images"
+        #DOCKER_BASE_NODE_IMAGE_TAG="node-14.15.1-alpine"
+        #BUILD_FROM_SOURCE_DOCKER_REPOSITORY_NAME=""
+
+        ## Docker variables for tags
+        DOCKER_LATEST_TAG="latest"
+        DOCKER_COMMIT_TAG=$(echo "$CODEBUILD_RESOLVED_SOURCE_VERSION" | cut -c 1-7)
+
+        # DRY
+        SCRIPT_DIR=$(dirname "$0")
+        PROJECT_DIR="$SCRIPT_DIR/../../"
+        DOCKER_FILE_PATH="dockerfiles/Dockerfile"
+        IMAGE_DEF_FILE_NAME="image-def.json"
+
+        # Login in AWS container registry with your AWS credentials
+        aws ecr get-login-password --region "${DOCKER_REGISTRY_REGION:-$AWS_REGION}" | docker login --username AWS --password-stdin "$DOCKER_REGISTRY_URL"
+
+        BASE_IMAGES_REGISTRY=${DOCKER_BASE_IMAGES_REGISTRY_URL:-$DOCKER_REGISTRY_URL}
+        DOCKER_REPOSITORY_NAME=${BUILD_FROM_SOURCE_DOCKER_REPOSITORY_NAME:-$DOCKER_REPOSITORY_NAME}
+
+        # Build Docker image
+        (docker build \
+        -f "$PROJECT_DIR"$DOCKER_FILE_PATH \
+        --build-arg BASE_IMAGES_ECR_REGISTRY="$BASE_IMAGES_REGISTRY" \
+        --build-arg BASE_IMAGES_REPOSITORY="$DOCKER_BASE_IMAGES_REPOSITORY_NAME" \
+        --build-arg BASE_NODE_IMAGE_TAG="$DOCKER_BASE_NODE_IMAGE_TAG" \
+        --build-arg DT_ONEAGENT_OPTIONS="$DT_ONEAGENT_OPTIONS" \
+        --build-arg DT_ONEAGENT_ARCH_NAME="$DT_ONEAGENT_ARCH_NAME" \
+        --build-arg DT_ONEAGENT_INSTALLER_PATH="$DT_ONEAGENT_INSTALLER_PATH" \
+        -t "$DOCKER_REPOSITORY_NAME":"$DOCKER_COMMIT_TAG" \
+        -t "$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG" \
+        -t "$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG"-"$CODEBUILD_BUILD_NUMBER" \
+        -t "$DOCKER_REPOSITORY_NAME":$DOCKER_LATEST_TAG \
+        "$PROJECT_DIR") || exit 1
+
+        # Tag Docker image
+        docker tag "$DOCKER_REPOSITORY_NAME":"$DOCKER_COMMIT_TAG" "$DOCKER_REGISTRY_URL"/"$DOCKER_REPOSITORY_NAME":"$DOCKER_COMMIT_TAG"
+        docker tag "$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG" "$DOCKER_REGISTRY_URL"/"$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG"
+        docker tag "$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG"-"$CODEBUILD_BUILD_NUMBER" "$DOCKER_REGISTRY_URL"/"$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG"-"$CODEBUILD_BUILD_NUMBER"
+        docker tag "$DOCKER_REPOSITORY_NAME":$DOCKER_LATEST_TAG "$DOCKER_REGISTRY_URL"/"$DOCKER_REPOSITORY_NAME":"$DOCKER_LATEST_TAG"
+
+        # Push/Publish Docker image with all tags
+        docker push "$DOCKER_REGISTRY_URL"/"$DOCKER_REPOSITORY_NAME" --all-tags || exit 1
+
+        # Generate Docker image definition for CloudFormation
+        printf '{"Image":"%s"}' "$DOCKER_REGISTRY_URL"/"$DOCKER_REPOSITORY_NAME":"$DOCKER_ENV_TAG"-"$CODEBUILD_BUILD_NUMBER" >"$PROJECT_DIR"$IMAGE_DEF_FILE_NAME
+
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - image-def.json

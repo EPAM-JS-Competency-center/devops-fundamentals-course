@@ -1,6 +1,6 @@
 ### Lab 3: Infrastructure as Code. CI/CD fundamentals.
 
-# Sub-task 1 - Configure Continuous Integrations (CI) for local development: front-end and back-end
+#### Sub-task 1 - Configure Continuous Integrations (CI) for local development: front-end and back-end
 
 0. **Clone**/**pull** given [front-end](https://github.com/EPAM-JS-Competency-center/shop-angular-cloudfront/tree/feat/devops-cicd-lab) and [back-end](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api/tree/feat/devops-cicd-lab) apps.
 1. **Configure** the following integrations for both apps and **add** appropriate npm scripts for convenience:
@@ -18,7 +18,7 @@
    - OPTIONALLY*, **configure** [lint-staged](https://www.npmjs.com/package/lint-staged)
 3.  **Update** your shell script from the lab #1 (**_quality-check.sh_**) to invoke the following quality tools and checks: _eslint_, _testing_, _dependencies check_, _static code analysis_.
 
-### Sub-task 2 - Configure CI/CD pipeline for front-end app
+#### Sub-task 2 - Configure CI/CD pipeline for front-end app
 
 _Local setup_:
 
@@ -29,9 +29,15 @@ _Local setup_:
     - using SSH and SCP tools copy and extracts app's files into web server's website hosting folder
 2. **Add** npm script (**cicd:local**) which will execute the script from previous step.
 
+_GitLab CI setup_:
+Based on your solutions from previous tasks, **update** `.gitlab-ci.yml` for static web app and **implement** running tools (`testing`, `linting`, `audit`, `building` the app).
+**Use** previously created scripts and configurations withing GitLab CI.
+**Push** changes and check if jobs are executed properly.
+Optionally, you can **configure** app deployment to the Cloud (AWS, Azure, etc) or any free CDN.
+
 _Cloud setup_:
 
-1. **Build** CI/CD pipeline using any of CI/CD or cloud providers and their tools.
+1. OPTIONALLY* **Build** CI/CD pipeline using any of CI/CD or cloud providers (not GitLab CI) and their tools.
 Pipeline should have the following stages:
    - _source code check out_
    - _code quality checks_: linting, testing, dependencies audit, app's build, and optionally static code analysis
@@ -44,18 +50,12 @@ Pipeline should have the following stages:
 
 ### Sub-task 3 - Configure CI/CD pipeline for back-end app
 
-_Local setup_:
+_GitLab CI setup_:
 
-1. **Dockerize** the back-end app:
-   - **add** _Dockerfile_ which will build an image with the back-end app
-   - **add** _.dockerignore_ to prevent unnecessary files from getting into the final Docker image
-   - **try** to make your final image as minimal as possible by applying some [Dockerfile optimisation techniques](https://www.codewall.co.uk/writing-an-optimized-dockerfile/)
-2. **Publish** your image to any [free private or public Docker registry](https://www.slant.co/topics/2436/~best-docker-image-private-registries) based on your preference.
-> **NB**:
-  >- if you have an account in AWS, Azure, GCP (or can create one) you can use their container registries.
-3. **Create** bash script (**_build_docker_image.sh_**), which will build Docker image/container of the app and push to your registry.
-4. **Pull** the image from registry and **execute**/**run** it locally, so that you can access the app through your browser or with curl.
-5. OPTIONALLY*, **Set** up Docker on your VM. Then **create** a shell script, which will SSH to your VM, pull Docker image from registry and run it on port 81
+Based on your solutions from previous tasks, **update** `.gitlab-ci.yml` for api back-end and **implement** running tools (`testing`, `linting`, `audit`, `building` the app).
+**Use** previously created scripts and configurations withing GitLab CI.
+**Push** changes and check if jobs are executed properly.
+OPTIONALLY*, you can **configure** pushing docker image to any free container registry and deploying/running it on any free virtual machine in the Cloud.
 
 _Cloud setup_:
 

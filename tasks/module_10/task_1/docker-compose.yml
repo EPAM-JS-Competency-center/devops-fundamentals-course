@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  app:
+    container_name: my_app
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo/my_db
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - my_network
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ./data/mongo:/data/db
+    networks:
+      - my_network
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    volumes:
+      - ./data/redis:/data
+    networks:
+      - my_network
+networks:
+  my_network:
