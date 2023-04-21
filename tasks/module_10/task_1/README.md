@@ -19,7 +19,7 @@ In scope of this task you need to:
 3. **Investigate** infrastructure management (IaC) tools: [CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html), [AWS CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html), and [Terraform](https://developer.hashicorp.com/terraform/tutorials?product_intent=terraform).
 **Check** and compare the [cloud-formation.yaml](cloud-formation.yaml) template, [AWS CDK](cdk-app-sample) and [terraform](terraform-app-sample/examples/complete) sample projects.
 What are the benefits you will get and challenges you can face if you use these tools? Are there any alternatives to these tools? Which one you'd prefer for the project?
-4. **Create** a comparison table (or define in your mind) for each group of tools and define the following characteristics: `language and tools`, `easy of use`, `clear to understand`, `costs`, `community and support`, `maturity of the tool`,`issues that can appear`, etc.
+4. **Create** a comparison table (or define in your mind) for each group of tools and define the following characteristics: `language and tools`, `easy of use`, `clear to understand`, `costs`, `community and support`, `maturity of the tool`, `issues that can appear`, etc.
 5. **Define** which tools you'd propose for the project.
 
 **[HERE YOU CAN FIND SOME IMPORTANT ORGANISATIONAL NOTES](../../../ORG-NOTES.md)**
