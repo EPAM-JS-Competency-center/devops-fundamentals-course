@@ -3,7 +3,7 @@ services:
   app:
     container_name: my_app
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
       args:
         NODE_ENV: production
