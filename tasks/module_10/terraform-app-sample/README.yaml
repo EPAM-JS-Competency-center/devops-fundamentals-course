@@ -1,0 +1,404 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# To rebuild `README.md`:
+# 1) Make all changes to `README.yaml`
+# 2) Run `make init` (you only need to do this once)
+# 3) Run`make readme` to rebuild this file.
+
+# Name of this project
+name: terraform-aws-cloudfront-s3-cdn
+
+# Tags of this project
+tags:
+  - aws
+  - terraform
+  - terraform-modules
+  - cdn
+  - cloudfront
+  - cloudfront-logs
+  - s3
+
+# Categories of this project
+categories:
+  - terraform-modules/cdn
+
+# Logo for this project
+#logo: docs/logo.png
+
+# License of this project
+license: "APACHE2"
+
+# Canonical GitHub repo
+github_repo: cloudposse/terraform-aws-cloudfront-s3-cdn
+
+# Badges to display
+badges:
+  - name: "Codefresh Build Status"
+    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-cloudfront-s3-cdn?type=cf-1"
+    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d169121757962ff25679794"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-cloudfront-s3-cdn.svg"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-cloudfront-s3-cdn/releases"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
+
+related:
+  - name: "terraform-aws-cloudfront-cdn"
+    description: "Terraform Module that implements a CloudFront Distribution (CDN) for a custom origin."
+    url: "https://github.com/cloudposse/terraform-aws-cloudfront-cdn"
+  - name: "terraform-aws-s3-log-storage"
+    description: "S3 bucket with built in IAM policy to allow CloudTrail logs"
+    url: "https://github.com/cloudposse/terraform-aws-s3-log-storage"
+
+# Short description of this project
+description: |-
+  Terraform module to provision an AWS CloudFront CDN with an S3 origin.
+
+# How to use this project
+usage: |-
+
+  For a complete example, see [examples/complete](examples/complete).
+
+  For automated tests of the complete example using [bats](https://github.com/bats-core/bats-core) and [Terratest](https://github.com/gruntwork-io/terratest) (which tests and deploys the example on AWS), see [test](test).
+
+  The following will create a new s3 bucket `eg-prod-app` for a cloudfront cdn, and allow `principal1` to upload to
+  `prefix1` and `prefix2`, while allowing `principal2` to manage the whole bucket.
+
+  ```hcl
+  module "cdn" {
+    source = "cloudposse/cloudfront-s3-cdn/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    namespace         = "eg"
+    stage             = "prod"
+    name              = "app"
+    aliases           = ["assets.cloudposse.com"]
+    dns_alias_enabled = true
+    parent_zone_name  = "cloudposse.com"
+
+    deployment_principal_arns = {
+      "arn:aws:iam::123456789012:role/principal1" = ["prefix1/", "prefix2/"]
+      "arn:aws:iam::123456789012:role/principal2" = [""]
+    }
+  }
+  ```
+
+  The following will reuse an existing s3 bucket `eg-prod-app` for a cloudfront cdn.
+
+  ```hcl
+  module "cdn" {
+    source = "cloudposse/cloudfront-s3-cdn/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    origin_bucket     = "eg-prod-app"
+    aliases           = ["assets.cloudposse.com"]
+    dns_alias_enabled = true
+    parent_zone_name  = "cloudposse.com"
+  }
+  ```
+
+  The following will create an Origin Group with the origin created by this module as a primary origin and an additional
+  S3 bucket as a failover origin.
+
+  ```hcl
+  module "s3_bucket" {
+    source  = "cloudposse/s3-bucket/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    attributes = ["failover-assets"]
+  }
+
+  module "cdn" {
+    source = "cloudposse/cloudfront-s3-cdn/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    aliases           = ["assets.cloudposse.com"]
+    dns_alias_enabled = true
+    parent_zone_name  = "cloudposse.com"
+    s3_origins = {
+      domain_name = module.s3_bucket.bucket_regional_domain_name
+      origin_id   = module.s3_bucket.bucket_id
+      origin_path = null
+      s3_origin_config = {
+        origin_access_identity = null # will get translated to the origin_access_identity used by the origin created by this module.
+      }
+    }
+    origin_groups = {
+      primary_origin_id  = null # will get translated to the origin id of the origin created by this module.
+      failover_origin_id = module.s3_bucket.bucket_id
+      failover_criteria  = [
+        403,
+        404,
+        500,
+        502
+      ]
+    }
+  }
+  ```
+
+  ### Background on CDNs, "Origins", S3 Buckets, and Web Servers
+  
+  #### CDNs and Origin Servers
+  
+  There are some settings you need to be aware of when using this module. In order to understand the settings,
+  you need to understand some of the basics of CDNs and web servers, so we are providing this _highly simplified_
+  explanation of how they work in order for you to understand the implications of the settings you are providing.
+  
+  A "**CDN**" ([Content Distribution Network](https://www.cloudflare.com/learning/cdn/what-is-a-cdn/)) is a collection of
+  servers scattered around the internet with the aim of making it faster for people to retrieve content from a website.
+  The details of why that is wanted/needed are beyond the scope of this document, as are most of the details of how
+  a CDN is implemented. For this discussion, we will simply treat a CDN as a set of web servers all serving
+  the same content to different users.
+  
+  In a normal web server (again, greatly simplified), you place files on the server and the web server software receives
+  requests from browsers and responds with the contents of the files.
+  
+  For a variety of reasons, the web servers in a  CDN do not work the way normal web servers work. Instead of getting
+  their content from files on the local server, the CDN web servers get their content by acting like web browsers
+  (proxies). When they get a request from a browser, they make the same request to what is called an "**Origin Server**".
+  It is called an origin server because it _serves_ the original content of the website, and thus is the _origin_
+  of the content.
+  
+  As a website publisher, you put content on an Origin Server (which users usually should be prevented from accessing)
+  and configure your CDN to use your Origin Server. Then you direct users to a URL hosted by your CDN provider, the
+  users' browsers connect to the CDN, the CDN gets the content from your Origin Server, your Origin Server gets the
+  content from a file on the server, and the data gets sent back hop by hop to the user. (The reason this ends up
+  being a good idea is that the CDN can cache the content for a while, serving multiple users the same content while
+  only contacting the origin server once.)
+  
+  #### S3 Buckets: file storage and web server
+  
+  S3 buckets were originally designed just to store files, and they are still most often used for that. The have a lot
+  of access controls to make it possible to strictly limit who can read what files in the bucket, so that companies
+  can store sensitive information there. You may have heard of a number of "data breaches" being caused by misconfigured
+  permissions on S3 buckets, making them publicly accessible. As a result of that, Amazon has some extra settings on
+  top of everything else to keep S3 buckets from being publicly accessible, which is usually a good thing.
+  
+  However, at some point someone realized that since these files were in the cloud, and Amazon already had these web servers
+  running to provide access to the files in the cloud, it was only a tiny leap to turn an S3 bucket into a web server.
+  So now S3 buckets [can be published as websites](https://docs.aws.amazon.com/AmazonS3/latest/userguide/EnableWebsiteHosting.html)
+  with a few configuration settings, including making the contents publicly accessible.
+  
+  #### Web servers, files, and the different modes of S3 buckets
+  
+  In the simplest websites, the URL "path" (the part after the site name) corresponds directly to the path (under
+  a special directory we will call `/webroot`) and name
+  of a file on the web server. So if the web server gets a request for "http://example.com/foo/bar/baz.html" it will
+  look for a file `/webroot/foo/bar/baz.html`. If it exists, the server will return its contents, and if it does not exist,
+  the server will return a `Not Found` error. An S3 bucket, whether configured as a file store or a website, will
+  always do both of these things.
+  
+  Web servers, however, do some helpful extra things. To name a few:
+  - If the URL ends with a `/`, as in `http://example.com/foo/bar/`, the web server (depending on how it is configured)
+  will either return a list of files in the directory or it will return the contents of a file in the directory with
+  a special name (by default, `index.html`) if it exists.
+  - If the URL does not end with a `/` but the last part, instead of being a file name, is a directory name, the web
+  server will redirect the user to the URL with the `/` at the end instead of saying the file was `Not Found`. This
+  redirect will get you to the `index.html` file we just talked about. Given the way people pass URLs around, this
+  turns out to be quite helpful.
+  - If the URL does not point to a directory or a file, instead of just sending back a cryptic `Not Found` error code,
+  it can return the contents of a special file called an "error document".
+  
+  #### Your Critical Decision: S3 bucket or website?
+  
+  All of this background is to help you decide how to set `website_enabled` and `s3_website_password_enabled`.
+  The default for `website_enabled` is `false` which is the easiest to configure and the most secure, and with
+  this setting, `s3_website_password_enabled` is ignored.
+  
+  S3 buckets, in file storage mode (`website_enabled = false`), do none of these extra things that web servers do.
+  If the URL points to a file, it will return the file, and if it does not _exactly_ match a file, it will return
+  `Not Found`. One big advantage, though, is that the S3 bucket can remain private (not publicly accessible). A second,
+  related advantage is that you can limit the website to a portion of the S3 bucket (everything under a certain prefix)
+  and keep the contents under the the other prefixes private.
+  
+  S3 buckets configured as static websites (`website_enabled = true`), however, have these extra web server features like redirects, `index.html`,
+  and error documents. The disadvantage is that you have to make the entire bucket public (although you can still
+  restrict access to some portions of the bucket).
+  
+  Another feature or drawback (depending on your point of view) of S3 buckets configured as static websites is that
+  they are directly accessible via their [website endpoint](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteEndpoints.html)
+  as well as through Cloudfront. This module has a feature, `s3_website_password_enabled`, that requires a password
+  be passed in the HTTP request header and configures the CDN to do that, which will make it much harder to access
+  the S3 website directly. So set `s3_website_password_enabled = true` to limit direct access to the S3 website
+  or set it to false if you want to be able to bypass Cloudfront when you want to.
+  
+  In addition to setting `website_enabled=true`, you must also:
+
+  * Specify at least one `aliases`, like `["example.com"]` or
+    `["example.com", "www.example.com"]`
+  * Specify an ACM certificate
+
+  ### Custom Domain Names and Generating a TLS Certificate with ACM
+  
+  When you set up Cloudfront, Amazon will generate a domain name for your website. You amost certainly will not
+  want to publish that. Instead, you will want to use a custom domain name. This module refers to them as "aliases".
+  
+  To use the custom domain names, you need to
+  - Pass them in as `aliases` so that Cloudfront will respond to them with your content
+  - Create CNAMEs for the aliases to point to the Cloudfront domain name. If your alias domains are hosted by
+  Route53 and you have IAM permissions to modify them, this module will set that up for you if you set `dns_alias_enabled = true`.
+  - Generate a TLS Certificate via ACM that includes the all the aliases and pass the ARN for the
+  certificate in `acm_certificate_arn`. Note that for Cloudfront, the certificate has to be provisioned in the
+  `us-east-1` region regardless of where any other resources are.
+
+  ```hcl
+  # For cloudfront, the acm has to be created in us-east-1 or it will not work
+  provider "aws" {
+    region = "us-east-1"
+    alias  = "aws.us-east-1"
+  }
+
+  # create acm and explicitly set it to us-east-1 provider
+  module "acm_request_certificate" {
+    source = "cloudposse/acm-request-certificate/aws"
+    providers = {
+      aws = aws.us-east-1
+    }
+
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+    domain_name                       = "example.com"
+    subject_alternative_names         = ["a.example.com", "b.example.com", "*.c.example.com"]
+    process_domain_validation_options = true
+    ttl                               = "300"
+  }
+
+  module "cdn" {
+    source = "cloudposse/cloudfront-s3-cdn/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version     = "x.x.x"
+    namespace         = "eg"
+    stage             = "prod"
+    name              = "app"
+    aliases           = ["assets.cloudposse.com"]
+    dns_alias_enabled = true
+    parent_zone_name  = "cloudposse.com"
+
+    acm_certificate_arn = module.acm_request_certificate.arn
+
+    depends_on = [module.acm_request_certificate]
+  }
+  ```
+
+  Or use the AWS cli to [request new ACM certifiates](http://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request.html) (requires email validation)
+  ```
+  aws acm request-certificate --domain-name example.com --subject-alternative-names a.example.com b.example.com *.c.example.com
+  ```
+
+  __NOTE__:
+
+  Although AWS Certificate Manager is supported in many AWS regions, to use an SSL certificate with CloudFront, it should be requested only in US East (N. Virginia) region.
+
+  https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-and-https-requirements.html
+  > If you want to require HTTPS between viewers and CloudFront, you must change the AWS region to US East (N. Virginia) in the AWS Certificate Manager console before you request or import a certificate.
+
+  https://docs.aws.amazon.com/acm/latest/userguide/acm-regions.html
+  > To use an ACM Certificate with Amazon CloudFront, you must request or import the certificate in the US East (N. Virginia) region. ACM Certificates in this region that are associated with a CloudFront distribution are distributed to all the geographic locations configured for that distribution.
+
+  This is a fundamental requirement of CloudFront, and you will need to request the certificate in `us-east-1` region.
+
+  If there are warnings around the outputs when destroying using this module.
+  Then you can use this method for supressing the superfluous errors.
+  `TF_WARN_OUTPUT_ERRORS=1 terraform destroy`
+
+  #### Lambda@Edge
+
+  This module also features a Lambda@Edge submodule. Its `lambda_function_association` output is meant to feed directly into the variable of the same name in the parent module.
+
+  ```hcl
+  provider "aws" {
+    region = var.region
+  }
+
+  provider "aws" {
+    region = "us-east-1"
+    alias  = "us-east-1"
+  }
+
+  module "lambda_at_edge" {
+    source = "cloudposse/cloudfront-s3-cdn/aws//modules/lambda@edge"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    functions = {
+      origin_request = {
+        source = [{
+          content  = <<-EOT
+          'use strict';
+
+          exports.handler = (event, context, callback) => {
+
+            //Get contents of response
+            const response = event.Records[0].cf.response;
+            const headers = response.headers;
+
+            //Set new headers
+            headers['strict-transport-security'] = [{key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubdomains; preload'}];
+            headers['content-security-policy'] = [{key: 'Content-Security-Policy', value: "default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'"}];
+            headers['x-content-type-options'] = [{key: 'X-Content-Type-Options', value: 'nosniff'}];
+            headers['x-frame-options'] = [{key: 'X-Frame-Options', value: 'DENY'}];
+            headers['x-xss-protection'] = [{key: 'X-XSS-Protection', value: '1; mode=block'}];
+            headers['referrer-policy'] = [{key: 'Referrer-Policy', value: 'same-origin'}];
+
+            //Return modified response
+            callback(null, response);
+          };
+          EOT
+          filename = "index.js"
+        }]
+        runtime      = "nodejs12.x"
+        handler      = "index.handler"
+        event_type   = "origin-response"
+        include_body = false
+      }
+    }
+
+    # An AWS Provider configured for us-east-1 must be passed to the module, as Lambda@Edge functions must exist in us-east-1
+    providers = {
+      aws = aws.us-east-1
+    }
+
+    context = module.this.context
+  }
+
+
+  module "cdn" {
+    source = "cloudposse/cloudfront-s3-cdn/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    ...
+    lambda_function_association = module.lambda_at_edge.lambda_function_association
+  }
+  ```
+
+include:
+  - "docs/targets.md"
+  - "docs/terraform.md"
+
+# Contributors to this project
+contributors:
+  - name: "Erik Osterman"
+    github: "osterman"
+  - name: "Andriy Knysh"
+    github: "aknysh"
+  - name: "Jamie Nelson"
+    github: "Jamie-BitFlight"
+  - name: "Clive Zagno"
+    github: "cliveza"
+  - name: "David Mattia"
+    github: "dmattia"
+  - name: "RB"
+    github: "nitrocode"
+  - name: "John McGehee"
+    github: "jmcgeheeiv"
+  - name: "Yonatan Koren"
+    github: "korenyoni"
+  - name: "Lucas Caparelli"
+    github: "lcaparelli"

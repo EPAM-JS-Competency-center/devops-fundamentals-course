@@ -1,0 +1,13 @@
+# Compiled files
+**/*.tfstate
+**/*.tfstate.backup
+**/*.terraform.tfstate*
+**/.terraform.lock.hcl
+
+# Module directory
+.idea
+*.iml
+**/.terraform
+
+.build-harness
+build-harness
