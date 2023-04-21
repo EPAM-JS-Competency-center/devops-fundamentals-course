@@ -1,6 +1,6 @@
 ### Lab 3: Infrastructure as Code. CI/CD fundamentals.
 
-# Sub-task 1 - Configure Continuous Integrations (CI) for local development: front-end and back-end
+#### Sub-task 1 - Configure Continuous Integrations (CI) for local development: front-end and back-end
 
 0. **Clone**/**pull** given [front-end](https://github.com/EPAM-JS-Competency-center/shop-angular-cloudfront/tree/feat/devops-cicd-lab) and [back-end](https://github.com/EPAM-JS-Competency-center/nestjs-rest-api/tree/feat/devops-cicd-lab) apps.
 1. **Configure** the following integrations for both apps and **add** appropriate npm scripts for convenience:
@@ -18,7 +18,7 @@
    - OPTIONALLY*, **configure** [lint-staged](https://www.npmjs.com/package/lint-staged)
 3.  **Update** your shell script from the lab #1 (**_quality-check.sh_**) to invoke the following quality tools and checks: _eslint_, _testing_, _dependencies check_, _static code analysis_.
 
-### Sub-task 2 - Configure CI/CD pipeline for front-end app
+#### Sub-task 2 - Configure CI/CD pipeline for front-end app
 
 _Local setup_:
 
