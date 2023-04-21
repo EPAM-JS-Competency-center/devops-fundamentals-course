@@ -1,6 +1,7 @@
 # Task 1: Dockerize a back-end app
 
 ## Task objectives:
+
 As a lead engineer you are responsible for making the back-end app Cloud Native.
 The first thing you should do in scope of upcoming improvements is to dockerize the app.
 

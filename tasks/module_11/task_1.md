@@ -1,6 +1,7 @@
 # Task 1: Get started with GitLab CI
 
 ## Task objectives:
+
 In scope of Cloud migration activities you were tasked to investigate CI/CD tools and create demonstration pipelines for apps you're currently developing.
 If your team and delivery manager are okay with chosen tools, these tools will be applied for other projects as well.
 After some investigation and consideration you decided to use GitLab CI.

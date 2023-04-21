@@ -1,6 +1,7 @@
 # Task 1: Investigate IaC tools
 
 ## Task objectives:
+
 You, as a key developer, received a task to investigate infrastructure as code (IaC) tools for a new project within account.
 It's going to be a complex project with a microservice backed by a database and caching layer. It also will have a static website which will provide a rich user interface for customers all around the world.
 AWS cloud is used to host all projects resources. 
