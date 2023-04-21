@@ -6,6 +6,8 @@ It's going to be a complex project with a microservice backed by a database and 
 AWS cloud is used to host all projects resources. 
 After investigation, you should propose IaC tools that you will use to manage all project's infrastructure as well as automate delivery processes.
 
+In scope of this task you need to:
+
 1. **Investigate** how you will manage local environment with [Docker Compose](https://docs.docker.com/compose/).
 **Check** the content of [docker-compose.yml](docker-compose.yml) and consider of how you can apply it to meet the requirements.
 **Study** the [yaml file reference](https://yaml.org/spec/1.2.2/) to strengthen/discover YAML features if needed.

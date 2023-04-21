@@ -29,9 +29,15 @@ _Local setup_:
     - using SSH and SCP tools copy and extracts app's files into web server's website hosting folder
 2. **Add** npm script (**cicd:local**) which will execute the script from previous step.
 
+_GitLab CI setup_:
+Based on your solutions from previous tasks, **update** `.gitlab-ci.yml` for static web app and **implement** running tools (`testing`, `linting`, `audit`, `building` the app).
+**Use** previously created scripts and configurations withing GitLab CI.
+**Push** changes and check if jobs are executed properly.
+Optionally, you can **configure** app deployment to the Cloud (AWS, Azure, etc) or any free CDN.
+
 _Cloud setup_:
 
-1. **Build** CI/CD pipeline using any of CI/CD or cloud providers and their tools.
+1. OPTIONALLY* **Build** CI/CD pipeline using any of CI/CD or cloud providers (not GitLab CI) and their tools.
 Pipeline should have the following stages:
    - _source code check out_
    - _code quality checks_: linting, testing, dependencies audit, app's build, and optionally static code analysis
@@ -44,7 +50,12 @@ Pipeline should have the following stages:
 
 ### Sub-task 3 - Configure CI/CD pipeline for back-end app
 
-TODO: update the lab.. 
+_GitLab CI setup_:
+
+Based on your solutions from previous tasks, **update** `.gitlab-ci.yml` for api back-end and **implement** running tools (`testing`, `linting`, `audit`, `building` the app).
+**Use** previously created scripts and configurations withing GitLab CI.
+**Push** changes and check if jobs are executed properly.
+OPTIONALLY*, you can **configure** pushing docker image to any free container registry and deploying/running it on any free virtual machine in the Cloud.
 
 _Cloud setup_:
 
